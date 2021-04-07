@@ -4,6 +4,7 @@ from scipy.linalg import qr
 from scipy.optimize import linprog, minimize
 from scipy.special import huber as huber_loss
 from copy import deepcopy
+import equadratures.plot as plot
 try:
     import cvxpy as cv
     cvxpy = True
@@ -795,6 +796,7 @@ class elastic_net(Solver):
             self.opt_idx = solver_dict['opt_idx']
         else:
             self.coefficients = elastic_net._elastic_net_single(A, b, self.verbose, self.lamda, self.alpha, self.opt)
+        
 
     @staticmethod
     def _elastic_net_single(A, b, verbose, lamda_val, alpha_val, opt):
@@ -1000,7 +1002,13 @@ class elastic_net(Solver):
             return (rho - lamda)
         else:
             return 0.0
-
+    
+    def plot_regpath(self,**kwargs):
+        
+        '''Plots the regularisation path'''
+        
+        return plot.plot_regpath(self,**kwargs)
+    
 # Custom solver subclass.
 #########################
 class custom_solver(Solver):

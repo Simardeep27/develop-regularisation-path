@@ -5,7 +5,6 @@ from scipy.spatial import ConvexHull, convex_hull_plot_2d
 import matplotlib
 from equadratures.datasets import score
 import numpy as np
-import scipy as sp
 sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_style("ticks")
@@ -259,7 +258,7 @@ def plot_Sobol_indices(Polynomial, order=1, save=False, show=True, return_figure
             for j in range(i+1,len(parameters_x)):
                 string=parameters_x[i] +' ' +parameters_x[j]
                 xticks.append(string)
-        ax.set_xticks(sp.arange(len(sobol_indices)))
+        ax.set_xticks(np.arange(len(sobol_indices)))
         ax.set_xticklabels(xticks)
         plt.setp(ax.xaxis.get_majorticklabels(),rotation=45,Fontsize=10)
     elif order==3:
@@ -277,7 +276,7 @@ def plot_Sobol_indices(Polynomial, order=1, save=False, show=True, return_figure
                 for k in range(j+1,len(parameters_x)):
                     string=parameters_x[i]+' '+parameters_x[j]+' '+parameters_x[k]
                     xticks.append(string)
-        ax.set_xticks(sp.arange(len(sobol_indices)))
+        ax.set_xticks(np.arange(len(sobol_indices)))
         ax.set_xticklabels(xticks,Fontsize=10,rotation=45)
     if save:
         plt.savefig('sobol_plot.png', dpi=140, bbox_inches='tight')
@@ -285,6 +284,71 @@ def plot_Sobol_indices(Polynomial, order=1, save=False, show=True, return_figure
         plt.show()
     if return_figure:
         return fig,ax
+    
+def plot_regpath(Polynomial,nplot=None,save=False,show=True,return_figure=False):
+    """
+    Generates a regularisation path for elastic net.
+
+    :param Poly Polynomial: 
+        An instance of the Poly class.
+    :param int nplot:
+        Number of coefficients for the plot.
+    :param bool save: 
+        Option to save the plot as a .png file.
+    :param bool show: 
+        Option to show the graph.
+    :param bool return_figure: 
+        Option to get the figure axes,figure.
+
+    """
+    lamdas = Polynomial.solver.lambdas
+    x_path = Polynomial.solver.xpath
+    IC = Polynomial.solver.ic
+    IC_std = Polynomial.solver.ic_std
+    idx = Polynomial.solver.opt_idx
+    elements = Polynomial.basis.elements
+    if nplot is not None and nplot > x_path.shape[1]:
+        raise ValueError("Max number of plots are {}".format(x_path.shape[1]))
+    else:  
+        fig, (ax1,ax2) = plt.subplots(figsize=(10,7),nrows=2,sharex=True,tight_layout=True)
+        ax1.set_xscale('log')
+        ax1.set_ylabel(r'$\theta$')
+        ax1.grid(True)
+        if nplot is None:
+            plots = range(x_path.shape[1])
+        else:
+            coeffs = x_path[0,:]
+            plots = (-np.abs(coeffs)).argsort()[:nplot]
+        for j in plots:
+            e1 = elements[j,0]
+            e2 = elements[j,1]
+            if e1 == 0:
+                label = r'$p_%d(x_2)$' %e2
+            elif e2 == 0:
+                label = r'$p_%d(x_1)$' %e1
+            else:
+                label = r'$p_%d(x_1)p_%d(x_2)$' %(e1,e2)        
+            ax1.plot(lamdas,x_path[:,j],'-',label=label,lw=2)
+        ax1.vlines(lamdas[idx],ax1.get_ylim()[0],ax1.get_ylim()[1],'k',ls='--')
+        fig.legend(loc='center left', bbox_to_anchor=(1, 0.6),ncol=1,edgecolor='0.0')
+        ax2.grid(True)
+        ax2.set_xlabel('Log($\\lambda$)')
+        ax2.set_ylabel('AIC')
+        ax2.set_xscale('log')
+        ax2.set_yscale('log')
+        ax2.plot(lamdas,IC,'-k',lw=2)
+        if IC_std is not None: 
+            plt.fill_between(lamdas,IC-IC_std,IC+IC_std,alpha=0.3)
+        ax2.vlines(lamdas[idx],ax2.get_ylim()[0],ax2.get_ylim()[1],'k',ls='--')
+        plt.setp(ax1.get_xticklabels(), visible=False)
+        plt.subplots_adjust(hspace=.0)
+        if save:
+            plt.savefig('regularisation_path.png', dpi=140, bbox_inches='tight')
+        if show:
+            plt.show()
+        if return_figure:
+            return fig,(ax1,ax2)
+
 def plot_pdf(Parameter, ax=None, data=None, save=False, xlim=None, ylim=None, show=True, return_figure=False):
     """
     Plots the probability density function for a Parameter.
