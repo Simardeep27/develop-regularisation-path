@@ -5,6 +5,7 @@ from scipy.spatial import ConvexHull, convex_hull_plot_2d
 import matplotlib
 from equadratures.datasets import score
 import numpy as np
+from equadratures import solver
 sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_style("ticks")
@@ -285,7 +286,7 @@ def plot_Sobol_indices(Polynomial, order=1, save=False, show=True, return_figure
     if return_figure:
         return fig,ax
     
-def plot_regpath(Polynomial,nplot=None,save=False,show=True,return_figure=False):
+def plot_regpath(solver,nplot=None,save=False,show=True,return_figure=False):
     """
     Generates a regularisation path for elastic net.
 
@@ -301,12 +302,11 @@ def plot_regpath(Polynomial,nplot=None,save=False,show=True,return_figure=False)
         Option to get the figure axes,figure.
 
     """
-    lamdas = Polynomial.solver.lambdas
-    x_path = Polynomial.solver.xpath
-    IC = Polynomial.solver.ic
-    IC_std = Polynomial.solver.ic_std
-    idx = Polynomial.solver.opt_idx
-    elements = Polynomial.basis.elements
+    lamdas = solver.lambdas
+    x_path = solver.xpath
+    IC = solver.ic
+    IC_std = solver.ic_std
+    idx = solver.opt_idx
     if nplot is not None and nplot > x_path.shape[1]:
         raise ValueError("Max number of plots are {}".format(x_path.shape[1]))
     else:  
@@ -320,14 +320,7 @@ def plot_regpath(Polynomial,nplot=None,save=False,show=True,return_figure=False)
             coeffs = x_path[0,:]
             plots = (-np.abs(coeffs)).argsort()[:nplot]
         for j in plots:
-            e1 = elements[j,0]
-            e2 = elements[j,1]
-            if e1 == 0:
-                label = r'$p_%d(x_2)$' %e2
-            elif e2 == 0:
-                label = r'$p_%d(x_1)$' %e1
-            else:
-                label = r'$p_%d(x_1)p_%d(x_2)$' %(e1,e2)        
+            label="j=%d"%j       
             ax1.plot(lamdas,x_path[:,j],'-',label=label,lw=2)
         ax1.vlines(lamdas[idx],ax1.get_ylim()[0],ax1.get_ylim()[1],'k',ls='--')
         fig.legend(loc='center left', bbox_to_anchor=(1, 0.6),ncol=1,edgecolor='0.0')

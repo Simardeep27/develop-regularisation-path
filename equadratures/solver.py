@@ -1003,10 +1003,11 @@ class elastic_net(Solver):
         else:
             return 0.0
     
-    def reg_path(nplot):
+    def plot_regpath(nplot):
         
-        return plot.plot_regpath(self,nplot)
-      
+        '''Plots the regularisation path'''
+        
+        return plot.plot_regpath(super().method,nplot)
     
 # Custom solver subclass.
 #########################
