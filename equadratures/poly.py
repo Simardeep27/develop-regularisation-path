@@ -288,7 +288,7 @@ class Poly(object):
             An instance of the Poly object.
         """
         if self.method.lower()=="elastic-net":
-            self.solver.elements=self.basis.elements
+            self.Solver.elements=self.basis.elements
         self.solver = Solver.select_solver(self.method, self.solver_args)
     
         
