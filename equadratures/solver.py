@@ -25,7 +25,7 @@ class Solver(object):
         self.method = method
         self.solver_args = solver_args
         self.gradient_flag = False
-
+        self.elements
         # Parse generic solver args here (solver specific ones done in subclass)
         # Defaults
         self.verbose = False
@@ -36,7 +36,6 @@ class Solver(object):
 
         if self.opt=='osqp' and not cvxpy: 
             self.opt='scipy'
-
     @staticmethod
     def select_solver(method,solver_args={}):
         """ 
@@ -796,7 +795,6 @@ class elastic_net(Solver):
             self.opt_idx = solver_dict['opt_idx']
         else:
             self.coefficients = elastic_net._elastic_net_single(A, b, self.verbose, self.lamda, self.alpha, self.opt)
-        
 
     @staticmethod
     def _elastic_net_single(A, b, verbose, lamda_val, alpha_val, opt):
@@ -837,7 +835,7 @@ class elastic_net(Solver):
         """
         n,p = A.shape
         b = b.reshape(-1)
-        assert alpha >= 0.01, 'elastic-path does not work reliably for alpha<0.01, choose 0>alpha<=1.'
+        assert alpha >= 0.01, 'elastic-path does not work reliably for alpha<0.01, choose 0.01>=alpha<=1.'
     
         if crit=='CV':
             nfold = 5
@@ -1002,13 +1000,25 @@ class elastic_net(Solver):
             return (rho - lamda)
         else:
             return 0.0
-    
-    def plot_regpath(self,nplot=None,save=False,show=True,return_figure=False):
+    def plot_regpath(self,elements,nplot=None,save=False,show=True,return_figure=False):
         
-        '''Plots the regularisation path'''
-        
+        """
+    Generates a regularisation path for elastic net.
+
+    :param Poly Polynomial: 
+        An instance of the Poly class.
+    :param int nplot:
+        Number of coefficients for the plot.
+    :param bool save: 
+        Option to save the plot as a .png file.
+    :param bool show: 
+        Option to show the graph.
+    :param bool return_figure: 
+        Option to get the figure axes,figure.
+
+    """
+        print(elements)
         return plot.plot_regpath(self,nplot,save,show,return_figure)
-    
 # Custom solver subclass.
 #########################
 class custom_solver(Solver):
