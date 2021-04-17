@@ -999,7 +999,7 @@ class elastic_net(Solver):
             return (rho - lamda)
         else:
             return 0.0
-    def plot_regpath(self,elements,nplot=None,save=False,show=True,return_figure=False):
+    def plot_regpath(self,nplot=None,save=False,show=True,return_figure=False):
         
         """
     Generates a regularisation path for elastic net.
@@ -1016,7 +1016,7 @@ class elastic_net(Solver):
         Option to get the figure axes,figure.
 
     """
-        print(elements)
+        print(self.elements)
         return plot.plot_regpath(self,nplot,save,show,return_figure)
 # Custom solver subclass.
 #########################
