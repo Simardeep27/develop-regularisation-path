@@ -1017,9 +1017,10 @@ class elastic_net(Solver):
 
     """
         if hasattr(self, 'elements'):    
-            return plot.plot_regpath(self,self.elements,nplot,save,show,return_figure)
+            elements=self.elements
         else:
-            return plot.plot_regpath(self,nplot,save,show,return_figure)
+            elements=None
+        return plot.plot_regpath(self,nplot,save,show,return_figure)
         
 # Custom solver subclass.
 #########################
