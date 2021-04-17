@@ -1016,8 +1016,7 @@ class elastic_net(Solver):
         Option to get the figure axes,figure.
 
     """
-        print(self.elements)
-        return plot.plot_regpath(self,nplot,save,show,return_figure)
+        return plot.plot_regpath(self,self.elements,nplot,save,show,return_figure)
 # Custom solver subclass.
 #########################
 class custom_solver(Solver):
