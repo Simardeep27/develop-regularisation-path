@@ -1016,7 +1016,7 @@ class elastic_net(Solver):
         Option to get the figure axes,figure.
 
     """
-        if hasattr(self, self.elements):    
+        if hasattr(self, 'elements'):    
             return plot.plot_regpath(self,self.elements,nplot,save,show,return_figure)
         else:
             return plot.plot_regpath(self,nplot,save,show,return_figure)
