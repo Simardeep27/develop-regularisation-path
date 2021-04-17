@@ -403,6 +403,7 @@ def plot_regpath(solver,elements=None,nplot=None,save=False,show=True,return_fig
     IC_std = solver.ic_std
     idx = solver.opt_idx
     element=elements
+    print(element)
     if nplot is not None and nplot > x_path.shape[1]:
         raise ValueError("Max number of plots are {}".format(x_path.shape[1]))
     else:  
