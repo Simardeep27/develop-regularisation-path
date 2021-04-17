@@ -287,9 +287,10 @@ class Poly(object):
         :param Poly self:
             An instance of the Poly object.
         """
+        
+        self.solver = Solver.select_solver(self.method, self.solver_args)
         if self.method.lower()=="elastic-net":
             self.Solver.elements=self.basis.elements
-        self.solver = Solver.select_solver(self.method, self.solver_args)
     
         
     def _set_points_and_weights(self):
