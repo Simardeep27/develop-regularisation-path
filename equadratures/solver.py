@@ -771,7 +771,6 @@ class elastic_net(Solver):
         self.tol = 1e-6
         self.crit = 'CV'
         self.lamda = 0.01
-        self.elements
 
         # Parse solver_args
         if 'path'       in self.solver_args: self.path       = solver_args.get('path')
