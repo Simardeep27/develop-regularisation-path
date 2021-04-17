@@ -416,7 +416,6 @@ def plot_regpath(solver,elements,nplot=None,save=False,show=True,return_figure=F
         else:
             coeffs = x_path[0,:]
             plots = (-np.abs(coeffs)).argsort()[:nplot]
-        if len(element) is None
         for j in plots:
             e1 = element[j,0]
             e2 = element[j,1]
