@@ -403,6 +403,7 @@ def plot_regpath(solver,elements,nplot=None,save=False,show=True,return_figure=F
     IC_std = solver.ic_std
     idx = solver.opt_idx
     element=elements
+    print(len(element))
     if nplot is not None and nplot > x_path.shape[1]:
         raise ValueError("Max number of plots are {}".format(x_path.shape[1]))
     else:  
@@ -415,6 +416,7 @@ def plot_regpath(solver,elements,nplot=None,save=False,show=True,return_figure=F
         else:
             coeffs = x_path[0,:]
             plots = (-np.abs(coeffs)).argsort()[:nplot]
+        if len(element) is None
         for j in plots:
             e1 = element[j,0]
             e2 = element[j,1]
