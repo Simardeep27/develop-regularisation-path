@@ -290,7 +290,7 @@ class Poly(object):
         
         self.solver = Solver.select_solver(self.method, self.solver_args)
         if self.method.lower()=="elastic-net":
-            self.Solver.elements=self.basis.elements
+            self.solver.elements=self.basis.elements
     
         
     def _set_points_and_weights(self):
